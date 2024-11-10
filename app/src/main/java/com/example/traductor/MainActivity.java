@@ -26,10 +26,16 @@ import java.io.FileOutputStream;
 import org.json.JSONObject;
 import android.util.Base64;
 
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
     private ImageView iv_mic;
     private TextView tv_Speech_to_text;
     private TextView tvMqttMessage;
+    private Spinner spinnerInputLanguage, spinnerOutputLanguage;
     private static final int REQUEST_CODE_SPEECH_INPUT = 1;
 
     private static final String BROKER_URL="tcp://192.168.1.37:1883";
@@ -38,10 +44,16 @@ public class MainActivity extends AppCompatActivity {
     private static final String CONTRA="1234321";
     private MqttHandler mqttHandler;
 
-    private ArrayList<byte[]> audioChunks = new ArrayList<>();
-    private int totalChunks = 0;  // Número total de fragmentos
-
     private AudioHandler audioHandler;
+
+    // Mapa para asociar el nombre del idioma con su código correspondiente
+    private final Map<String, String> languageCodeMap = new HashMap<String, String>() {{
+        put("Español", "es-CL");
+        put("Inglés", "en-US");
+        put("Francés", "fr-FR");
+        put("Alemán", "de-DE");
+        put("Japonés", "ja-JP");
+    }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         iv_mic = findViewById(R.id.btnMic);
         tv_Speech_to_text = findViewById(R.id.etTextFromMic);
         tvMqttMessage = findViewById(R.id.tvMqttMessage);
+        spinnerInputLanguage = findViewById(R.id.spinnerInputLang);
+        spinnerOutputLanguage = findViewById(R.id.spinnerOutputLang);
 
         mqttHandler = new MqttHandler();
         audioHandler = new AudioHandler(this);
@@ -59,11 +73,19 @@ public class MainActivity extends AppCompatActivity {
         mqttHandler.subscribe("server/response");
         mqttHandler.subscribe("server/msg");
 
+        // Configurar opciones de idiomas
+        String[] languages = {"Español", "Inglés", "Francés", "Alemán", "Japonés"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, languages);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerInputLanguage.setAdapter(adapter);
+        spinnerOutputLanguage.setAdapter(adapter);
+
         iv_mic.setOnClickListener(v -> {
+            // Obtener el código de idioma correspondiente a la selección del usuario
+            String inputLanguage = languageCodeMap.get(spinnerInputLanguage.getSelectedItem().toString());
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, inputLanguage);
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Escuchando...");
 
             try {
@@ -93,12 +115,14 @@ public class MainActivity extends AppCompatActivity {
             String message = Objects.requireNonNull(result).get(0);
             tv_Speech_to_text.setText(message);
             disableUserInteraction();
-            mqttHandler.publish("client/messages", message);
+
+            // Obtener el código de idioma correspondiente a la salida seleccionada
+            String outputLanguage = languageCodeMap.get(spinnerOutputLanguage.getSelectedItem().toString());
+            mqttHandler.publish("client/messages", message + "|" + outputLanguage);
         }
     }
 
     private void disableUserInteraction() {
-        // Desactivar botones u otras vistas interactivas
         findViewById(R.id.btnMic).setEnabled(false);
         findViewById(R.id.etTextFromMic).setEnabled(false);
 
@@ -107,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void enableUserInteraction() {
-        // Activar botones u otras vistas interactivas
         findViewById(R.id.btnMic).setEnabled(true);
         findViewById(R.id.etTextFromMic).setEnabled(true);
         ProgressBar progressBar = findViewById(R.id.progressBar);
