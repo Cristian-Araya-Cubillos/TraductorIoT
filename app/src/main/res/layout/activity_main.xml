@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context=".MainActivity">
 
     <!-- Título de la aplicación -->
@@ -12,80 +14,117 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Traductor de Voz"
-        android:textSize="24sp"
+        android:textSize="26sp"
         android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        android:layout_marginTop="164dp" />
+        android:layout_marginTop="40dp" />
+
+    <!-- Contenedor de Selección de idiomas -->
+    <LinearLayout
+        android:id="@+id/languageContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_background"
+        android:padding="16dp"
+        android:elevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="24dp">
+
+        <!-- Idioma de entrada -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Idioma de Entrada"
+            android:textColor="@color/textPrimaryColor"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerInputLang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary" />
+
+        <!-- Idioma de salida -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Idioma de Salida"
+            android:textColor="@color/textPrimaryColor"
+            android:textSize="14sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerOutputLang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary" />
+    </LinearLayout>
 
     <!-- Icono de Micrófono para grabar audio -->
     <ImageView
         android:id="@+id/btnMic"
-        android:layout_width="170dp"
-        android:layout_height="117dp"
-        app:layout_constraintBottom_toTopOf="@+id/etTextFromMic"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/circle_background"
+        android:elevation="8dp"
+        android:padding="20dp"
+        app:srcCompat="@android:drawable/ic_btn_speak_now"
+        app:tint="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@+id/languageContainer"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:layout_constraintVertical_bias="0.392"
-        app:srcCompat="@android:drawable/ic_btn_speak_now" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Campo de texto donde se mostrará lo capturado por el micrófono -->
+    <!-- Campo de texto donde se muestra el texto capturado -->
     <TextView
         android:id="@+id/etTextFromMic"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="24dp"
         android:background="@drawable/rounded_background"
         android:gravity="top"
         android:hint="Texto capturado del micrófono"
-        android:inputType="textMultiLine"
         android:padding="16dp"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/textPrimaryColor"
+        android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/btnMic"
-        app:layout_constraintBottom_toTopOf="@id/tvMqttTitle" />
-
-    <!-- Título para mostrar mensaje de MQTT -->
-    <TextView
-        android:id="@+id/tvMqttTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mensaje MQTT"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etTextFromMic"
-        app:layout_constraintHorizontal_bias="0.5"
-        android:layout_marginTop="36dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Área donde se mostrará el mensaje recibido por MQTT -->
+    <!-- Área donde se muestra el mensaje recibido por MQTT -->
     <TextView
         android:id="@+id/tvMqttMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="24dp"
         android:background="@drawable/rounded_background"
         android:padding="16dp"
         android:text="Esperando mensaje..."
-        android:textColor="#555555"
+        android:textColor="@color/hintColor"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etTextFromMic"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvMqttTitle"
-        app:layout_constraintHorizontal_bias="0.5" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:visibility="gone"
-        android:layout_centerInParent="true" />
-
+        app:layout_constraintTop_toBottomOf="@id/tvMqttMessage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,6 +47,8 @@ public class AudioHandler {
     }
 
     private boolean allChunksReceived() {
+        //System.out.println("Audios"+audioChunks.size());
+        //System.out.println("Chunks"+totalChunks);
         if (audioChunks.size() != totalChunks) return false;
 
         for (byte[] chunk : audioChunks) {
@@ -57,6 +59,7 @@ public class AudioHandler {
 
     private void reconstructAudioFile() {
         try {
+            //System.out.println("Entra al try");
             File outputFile = new File("/storage/emulated/0/Download/output_audio.mp3");
             FileOutputStream fos = new FileOutputStream(outputFile);
             for (byte[] chunk : audioChunks) {
@@ -69,7 +72,7 @@ public class AudioHandler {
             audioChunks.clear();
             totalChunks = 0;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 
