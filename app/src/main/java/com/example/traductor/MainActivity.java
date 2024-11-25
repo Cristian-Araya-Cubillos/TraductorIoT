@@ -32,6 +32,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import androidx.appcompat.app.AlertDialog;
+
 public class MainActivity extends AppCompatActivity {
     private String deviceId;
     private ImageView iv_mic;
@@ -67,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
         tvMqttMessage = findViewById(R.id.tvMqttMessage);
         spinnerInputLanguage = findViewById(R.id.spinnerInputLang);
         spinnerOutputLanguage = findViewById(R.id.spinnerOutputLang);
+
+        ImageView btnInfo = findViewById(R.id.btnInfo);
+        btnInfo.setOnClickListener(v -> showInstructionsDialog());
 
         mqttHandler = new MqttHandler();
         audioHandler = new AudioHandler(this);
@@ -145,5 +150,21 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.etTextFromMic).setEnabled(true);
         ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
+    }
+
+    private void showInstructionsDialog() {
+        String instructions = "Instrucciones para usar la aplicación:\n\n" +
+                "1. Selecciona el idioma de entrada y el idioma de salida utilizando los menús desplegables.\n" +
+                "2. Presiona el botón del micrófono para comenzar a hablar en el idioma seleccionado como entrada.\n" +
+                "3. La aplicación transcribirá tu voz y la enviará al servidor para traducirla al idioma de salida.\n" +
+                "4. Si el servidor envía un audio como respuesta, este será reproducido automáticamente.\n\n" +
+                "Nota: Asegúrate de tener una conexión a internet activa.";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Cómo usar la aplicación")
+                .setMessage(instructions)
+                .setPositiveButton("Entendido", (dialog, which) -> dialog.dismiss())
+                .setCancelable(true)
+                .show();
     }
 }
