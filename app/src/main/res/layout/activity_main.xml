@@ -50,6 +50,31 @@
         android:layout_marginTop="24dp"
         android:layout_marginHorizontal="24dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Seleccion de Idioma"
+                android:textColor="@color/textPrimaryColor"
+                android:textSize="20sp"/>
+
+            <ImageView
+                android:id="@+id/btnLanguageInfo"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="1dp"
+                android:layout_gravity="end"
+                app:srcCompat="@drawable/ic_globe" />
+        </LinearLayout>
+
         <!-- Idioma de entrada -->
         <TextView
             android:layout_width="wrap_content"
