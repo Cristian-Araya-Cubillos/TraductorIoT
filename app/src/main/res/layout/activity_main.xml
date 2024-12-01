@@ -122,47 +122,80 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Campo de texto donde se muestra el texto capturado -->
-    <TextView
-        android:id="@+id/etTextFromMic"
+    <!-- Sección de texto capturado y mensaje recibido -->
+    <LinearLayout
+        android:id="@+id/resultsContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginHorizontal="24dp"
-        android:background="@drawable/rounded_background"
-        android:gravity="top"
-        android:hint="Texto capturado del micrófono"
+        android:orientation="vertical"
         android:padding="16dp"
-        android:textColor="@color/textPrimaryColor"
-        android:textSize="16sp"
+        android:background="@drawable/rounded_background"
+        android:elevation="4dp"
         app:layout_constraintTop_toBottomOf="@id/btnMic"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <!-- Área donde se muestra el mensaje recibido por MQTT -->
-    <TextView
-        android:id="@+id/tvMqttMessage"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="24dp"
-        android:background="@drawable/rounded_background"
-        android:padding="16dp"
-        android:text="Esperando mensaje..."
-        android:textColor="@color/hintColor"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/etTextFromMic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!-- Texto capturado del micrófono -->
+        <TextView
+            android:id="@+id/tvSpeechTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Texto Capturado"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
 
+        <TextView
+            android:id="@+id/etTextFromMic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_border"
+            android:padding="12dp"
+            android:gravity="start|top"
+            android:hint="Aquí aparecerá el texto del micrófono"
+            android:textColor="@color/textPrimaryColor"
+            android:textSize="14sp"
+            android:minHeight="48dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Mensaje recibido del servidor -->
+        <TextView
+            android:id="@+id/tvMqttTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mensaje del Servidor"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvMqttMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_border"
+            android:padding="12dp"
+            android:gravity="start|top"
+            android:text="Esperando mensaje..."
+            android:textColor="@color/hintColor"
+            android:textSize="14sp"
+            android:minHeight="48dp" />
+
+    </LinearLayout>
+
+    <!-- Barra de progreso centrada -->
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/tvMqttMessage"
+        app:layout_constraintTop_toBottomOf="@id/resultsContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
